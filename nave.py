@@ -4,10 +4,11 @@ import pygame
 class Nave:
     """CLass to manage the nave."""
 
-    def __init__(self, rocket):
+    def __init__(self, astropop):
         """INitialize the atrribiutes of the class"""
-        self.pantalla = rocket.pantalla
+        self.pantalla = astropop.pantalla
         self.pantalla_rect = self.pantalla.get_rect()
+        self.options = astropop.options
 
         self.ship = pygame.image.load("./images/UFO.png")
         self.ship_small = pygame.transform.scale(self.ship, (100, 100))
@@ -21,15 +22,14 @@ class Nave:
 
     def movement(self):
         """movement of the ship depends of the flags"""
-
         if self.r_flag and self.ship_rect.right < self.pantalla_rect.right:
-            self.ship_rect.x += 4
+            self.ship_rect.x += self.options.speed
         if self.l_flag and self.ship_rect.left > 0:
-            self.ship_rect.x -= 4
+            self.ship_rect.x -= self.options.speed
         if self.u_flag and self.ship_rect.top > 0:
-            self.ship_rect.y -= 4
+            self.ship_rect.y -= self.options.speed
         if self.d_flag and self.ship_rect.bottom < self.pantalla_rect.bottom:
-            self.ship_rect.y += 4
+            self.ship_rect.y += self.options.speed
 
     def materialize(self):
         """draw the ship in the screen"""
