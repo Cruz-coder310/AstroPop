@@ -8,14 +8,21 @@ class Bala(Sprite):
     def __init__(self, astropop):
         """initialize atribbutes of the class"""
         super().__init__()
+
         self.pantalla = astropop.pantalla
         self.nave = astropop.nave
-        self.medidas_nave = self.nave.ship_rect
 
-        self.casco = pygame.image.load("./images/proto.png")
-        self.rect = self.casco.get_rect()
-        self.rect.midbottom = self.medidas_nave.midtop
+        self.image = pygame.image.load("./images/proto.png")
+        self.rect = self.image.get_rect()
 
-    def materialize(self):
-        """draw the vala in the screan"""
-        self.pantalla.blit(self.casco, self.rect)
+        self.rect.midtop = self.nave.rect.midtop
+
+        self.x = float(self.rect.x)
+
+        # self.s_flag = False
+
+    def update(self):
+        """Mmovement of the bullet realted to the ship"""
+        # if self.s_flag:
+        self.x += 2
+        self.rect.x = self.x

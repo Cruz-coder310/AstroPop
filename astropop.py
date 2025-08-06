@@ -20,15 +20,20 @@ class Rocket:
         pygame.display.set_caption("AstroPop")
 
         self.options = Options()
-        self.nave = Nave(self)
-        self.balas = Bala(self)
         self.reloj = pygame.time.Clock()
+
+        self.naves = pygame.sprite.Group()
+        self.nave = Nave(self)
+        self.naves.add(self.nave)
+
+        self.balas = pygame.sprite.Group()
 
     def run_game(self):
         """main loop to run the game"""
         while True:
             self._events()
-            self.nave.movement()
+            self.nave.update()
+            self.balas.update()
             self._art_painting()
             self.reloj.tick(60)
 
@@ -52,6 +57,8 @@ class Rocket:
             self.nave.u_flag = True
         elif event.key == pygame.K_DOWN:
             self.nave.d_flag = True
+        elif event.key == pygame.K_SPACE:
+            self._fired_bala()
         elif event.key == pygame.K_q:
             sys.exit()
 
@@ -66,11 +73,16 @@ class Rocket:
         elif event.key == pygame.K_DOWN:
             self.nave.d_flag = False
 
+    def _fired_bala(self):
+        """Creat a new bullet and add it to the Group"""
+        new_bala = Bala(self)
+        self.balas.add(new_bala)
+
     def _art_painting(self):
         """drawing the all art in the screen"""
         self.pantalla.fill("black")
-        self.nave.materialize()
-        self.balas.materialize()
+        self.balas.draw(self.pantalla)
+        self.naves.draw(self.pantalla)
         pygame.display.flip()
 
 
