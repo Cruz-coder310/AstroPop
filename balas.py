@@ -10,19 +10,20 @@ class Bala(Sprite):
         super().__init__()
 
         self.pantalla = astropop.pantalla
+        self.options = astropop.options
         self.nave = astropop.nave
 
-        self.image = pygame.image.load("./images/proto.png")
+        self.image_1 = pygame.image.load("./images/proto.png")
+        self.image_scale = pygame.transform.scale(
+            self.image_1, (self.options.bala_widht, self.options.bala_height)
+        )
+        self.image = self.image_scale.convert_alpha()
+
         self.rect = self.image.get_rect()
-
-        self.rect.midtop = self.nave.rect.midtop
-
+        self.rect.midright = self.nave.rect.midright
         self.x = float(self.rect.x)
-
-        # self.s_flag = False
 
     def update(self):
         """Mmovement of the bullet realted to the ship"""
-        # if self.s_flag:
-        self.x += 2
+        self.x += self.options.bala_speed
         self.rect.x = self.x
