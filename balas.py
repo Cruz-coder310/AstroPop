@@ -10,7 +10,6 @@ class Bala(Sprite):
         super().__init__()
 
         # Game references.
-        self.pantalla = game.pantalla
         self.options = game.options
         self.nave = game.nave
 

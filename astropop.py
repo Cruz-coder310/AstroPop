@@ -20,14 +20,15 @@ class AstroPop:
         self.naves = pygame.sprite.Group()
         self.nave = Nave(self)
         self.naves.add(self.nave)
+
         self.balas = pygame.sprite.Group()
 
     def run_game(self):
         """Main game loop running at 60 FPS."""
         while True:
             self._process_events()
-            self.nave.update()
-            self.balas.update()
+            self.naves.update()
+            self._update_balas()
             self._render_screen()
             self.reloj.tick(60)
 
@@ -69,8 +70,22 @@ class AstroPop:
 
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
-        new_bala = Bala(self)
-        self.balas.add(new_bala)
+        if len(self.balas) < self.options.balas:
+            new_bala = Bala(self)
+            self.balas.add(new_bala)
+
+    def _update_balas(self):
+        """
+        Update the position of the balas on the screen & remove those that have
+        moved off-screen.
+        """
+        self.balas.update()
+        for bala in self.balas:
+            if bala.rect.left >= self.nave.pantalla_rect.right:
+                bala.kill()
+        # This print lets me see if the bala was deleted after moving
+        # off-screen.
+        # print(len(self.balas))
 
     def _render_screen(self):
         """Draw all game elements on pantalla."""

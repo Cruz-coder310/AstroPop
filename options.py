@@ -10,3 +10,6 @@ class Options:
         # Bullet dimensions.
         self.bala_widht = 60
         self.bala_height = 40
+
+        # Number of balas visible in the screen.
+        self.balas = 10
