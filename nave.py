@@ -10,13 +10,15 @@ class Nave(Sprite):
         super().__init__()
 
         # Get game references.
-        self.pantalla = game.pantalla
-        self.pantalla_rect = self.pantalla.get_rect()
+        self.pantalla_rect = game.rect_pnt
         self.options = game.options
 
         # Load and scale ship image.
         self.ship = pygame.image.load("./images/UFO.png")
-        self.ship_scale = pygame.transform.scale(self.ship, (100, 100))
+        self.ship_scale = pygame.transform.scale(
+            self.ship, (self.options.ancho_nave, self.options.alto_nave)
+        )
+        # Alpha improves image optimization and blitting speed.
         self.image = self.ship_scale.convert_alpha()
 
         # Position ship at left center of screen.
@@ -30,7 +32,7 @@ class Nave(Sprite):
         # Movement flags.
         self.moving_right = False
         self.moving_left = False
-        self.maving_up = False
+        self.moving_up = False
         self.moving_down = False
 
     def update(self):
@@ -39,7 +41,7 @@ class Nave(Sprite):
             self.x += self.options.nave_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.options.nave_speed
-        if self.maving_up and self.rect.top > 0:
+        if self.moving_up and self.rect.top > 0:
             self.y -= self.options.nave_speed
         if self.moving_down and self.rect.bottom < self.pantalla_rect.bottom:
             self.y += self.options.nave_speed

@@ -14,10 +14,11 @@ class Bala(Sprite):
         self.nave = game.nave
 
         # Load & scale bullet image.
-        self.image_1 = pygame.image.load("./images/proto.png")
+        self.image_1 = pygame.image.load("./images/48.png")
         self.image_scale = pygame.transform.scale(
-            self.image_1, (self.options.bala_widht, self.options.bala_height)
+            self.image_1, (self.options.bala_width, self.options.bala_height)
         )
+        # Alpha essential for image optimization and faster blitting performance
         self.image = self.image_scale.convert_alpha()
 
         # Position bullet at ship's right side.
