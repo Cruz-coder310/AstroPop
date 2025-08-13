@@ -1,6 +1,8 @@
 import pygame
 from pygame.sprite import Sprite
 
+import resource_manager
+
 
 class NaveEnemiga(Sprite):
     """Class to manage the enemy ships."""
@@ -12,17 +14,17 @@ class NaveEnemiga(Sprite):
         self.options = game.options
         self.rect_screen = game.pantalla
 
-        # Update the NaveEnemiga and set the correct size
-        self.original_image = pygame.image.load("./images/enemyship.png")
-        self.scale_image = pygame.transform.scale(
-            self.original_image, (self.options.enemy_width, self.options.enemy_height)
-        )
-        self.image = self.scale_image.convert_alpha()
+        # Load the 'NaveEnemiga' asset from the resources module.
+        self.image = resource_manager.resources.enemigo_img
 
         # position of the enemyship
         self.rect = self.image.get_rect()
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
+
+        # Hitbox defines the size of the rect used for bullet collisions.
+        self.hitbox = self.rect.copy()
+        self.hitbox.inflate_ip(-79, -79)
 
     def vertical_edges(self):
         """Detect vertical edge contact and return a boolean result."""
@@ -34,3 +36,5 @@ class NaveEnemiga(Sprite):
         self.y += self.options.enemy_speed * self.options.armada_direction
         self.rect.x = self.x
         self.rect.y = self.y
+
+        self.hitbox.center = self.rect.center

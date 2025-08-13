@@ -2,6 +2,7 @@ import pygame
 import sys
 from nave import Nave
 from options import Options
+import resource_manager
 from balas import Bala
 from nave_enemiga import NaveEnemiga
 
@@ -18,6 +19,9 @@ class AstroPop:
         self.pantalla = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.rect_pnt = self.pantalla.get_rect()
         pygame.display.set_caption("AstroPop")
+
+        # Asset management
+        resource_manager.init_manager(self.options)
 
         # Initialize sprite groups
         # Player nave.
@@ -91,9 +95,24 @@ class AstroPop:
         for bala in self.balas:
             if bala.rect.left >= self.rect_pnt.right:
                 bala.kill()
-
         # This print lets me see if the bala was deleted after moving off-screen.
         # print(len(self.balas))
+        self._check_collide_bullet_enemy()
+
+    def _check_collide_bullet_enemy(self):
+        """removes any balas & enemigos that have collided."""
+        collision = pygame.sprite.groupcollide(
+            self.balas, self.enemigos, True, True, collided=self._hitbox_collision
+        )
+        if not self.enemigos:
+            self.balas.empty()
+            self._create_armada()
+
+    def _hitbox_collision(self, sprite_1, sprite_2):
+        """
+        Detects if the bala's rectangle intersects with the enemy's hitbox.
+        """
+        return sprite_1.rect.colliderect(sprite_2.hitbox)
 
     def _create_armada(self):
         """Build an enemy armada based on the screen dimensions."""
