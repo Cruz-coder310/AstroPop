@@ -1,25 +1,22 @@
 import pygame
 from pygame.sprite import Sprite
 
+import resource_manager as rm
+
 
 class Nave(Sprite):
     """Class to manage the player's ship in the main game."""
 
     def __init__(self, game):
-        """Initialize ship attributes & load image."""
+        """initialize the attributes of the Nave class."""
         super().__init__()
 
         # Get game references.
         self.pantalla_rect = game.rect_pnt
         self.options = game.options
 
-        # Load and scale ship image.
-        self.ship = pygame.image.load("./images/UFO.png")
-        self.ship_scale = pygame.transform.scale(
-            self.ship, (self.options.ancho_nave, self.options.alto_nave)
-        )
-        # Alpha improves image optimization and blitting speed.
-        self.image = self.ship_scale.convert_alpha()
+        # Load the 'Nave' asset from the resources module.
+        self.image = rm.resources.nave_img
 
         # Position ship at left center of screen.
         self.rect = self.image.get_rect()

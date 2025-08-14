@@ -1,25 +1,22 @@
 import pygame
 from pygame.sprite import Sprite
 
+import resource_manager as rm
+
 
 class Bala(Sprite):
     """A class to manage bullets in the main game."""
 
     def __init__(self, game):
-        """Initialize bullet attributes & position."""
+        """initialize the attributes of the Bala class."""
         super().__init__()
 
         # Game references.
         self.options = game.options
         self.nave = game.nave
 
-        # Load & scale bullet image.
-        self.image_1 = pygame.image.load("./images/48.png")
-        self.image_scale = pygame.transform.scale(
-            self.image_1, (self.options.bala_width, self.options.bala_height)
-        )
-        # Alpha essential for image optimization and faster blitting performance
-        self.image = self.image_scale.convert_alpha()
+        # Load the 'Bala' asset from the resources module.
+        self.image = rm.resources.bala_img
 
         # Position bullet at ship's right side.
         self.rect = self.image.get_rect()

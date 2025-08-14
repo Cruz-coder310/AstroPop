@@ -1,13 +1,14 @@
 import pygame
 from pygame.sprite import Sprite
 
-import resource_manager
+import resource_manager as rm
 
 
 class NaveEnemiga(Sprite):
     """Class to manage the enemy ships."""
 
     def __init__(self, game):
+        """initialize the attributes of the NaveEnemiga class."""
         super().__init__()
 
         # Game references
@@ -15,7 +16,7 @@ class NaveEnemiga(Sprite):
         self.rect_screen = game.pantalla
 
         # Load the 'NaveEnemiga' asset from the resources module.
-        self.image = resource_manager.resources.enemigo_img
+        self.image = rm.resources.enemigo_img
 
         # position of the enemyship
         self.rect = self.image.get_rect()
