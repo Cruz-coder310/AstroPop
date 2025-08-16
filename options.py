@@ -15,6 +15,7 @@ class Options:
 
         # Number of balas visible on the screen.
         self.balas = 10
+
         # Enemyship.
         self.margen_enemigo = 30
         self.enemy_width = 80
@@ -22,5 +23,7 @@ class Options:
         self.enemy_speed = 1.5
 
         # Armada
-        self.armada_left_speed = 1.5
+        self.armada_left_speed = 10.5
         self.armada_direction = 1
+
+        self.vidas = 3

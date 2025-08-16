@@ -1,5 +1,6 @@
 import pygame
 import sys
+from time import sleep
 from nave import Nave
 from options import Options
 import resource_manager
@@ -33,14 +34,17 @@ class AstroPop:
         # Enemyships.
         self.enemigos = pygame.sprite.Group()
         self._create_armada()
+        # Flag to control whether the game is frozen.
+        self.game_active = True
 
     def run_game(self):
         """Main game loop running at 60 FPS."""
         while True:
             self._process_events()
-            self.naves.update()
-            self._update_balas()
-            self._update_armada()
+            if self.game_active:
+                self._update_nave()
+                self._update_balas()
+                self._update_armada()
             self._render_screen()
             self.reloj.tick(60)
 
@@ -85,6 +89,37 @@ class AstroPop:
         if len(self.balas) < self.options.balas:
             new_bala = Bala(self)
             self.balas.add(new_bala)
+
+    def _update_nave(self):
+        """Update the nave's position & check for collisions."""
+        self.naves.update()
+        # Check if the nave takes damage from enemy collisions.
+        if pygame.sprite.spritecollideany(self.nave, self.enemigos):
+            self._handle_life_loss()
+        self._check_enemy_left_edge_hit()
+
+    def _handle_life_loss(self):
+        """
+        Manages the nave's life loss in response to damage or enemy advancement.
+        """
+        if self.options.vidas > 0:
+            self.options.vidas -= 1
+            self.balas.empty()
+            self.enemigos.empty()
+            self.nave.set_position()
+            sleep(1)
+        else:
+            self.game_active = False
+
+    def _check_enemy_left_edge_hit(self):
+        """
+        Monitors enemy nave movement & activates hit behavior when they reach
+        the left side of the screen
+        """
+        for enemigo in self.enemigos.sprites():
+            if enemigo.rect.x <= 0:
+                self._handle_life_loss()
+                break
 
     def _update_balas(self):
         """
