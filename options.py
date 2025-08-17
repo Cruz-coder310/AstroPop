@@ -27,3 +27,6 @@ class Options:
         self.armada_direction = 1
 
         self.vidas = 3
+
+        self.boton_width = 600
+        self.boton_height = 350

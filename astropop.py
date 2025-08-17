@@ -6,6 +6,7 @@ from options import Options
 import resource_manager
 from balas import Bala
 from nave_enemiga import NaveEnemiga
+from boot_button import BotonInicio
 
 
 class AstroPop:
@@ -35,7 +36,9 @@ class AstroPop:
         self.enemigos = pygame.sprite.Group()
         self._create_armada()
         # Flag to control whether the game is frozen.
-        self.game_active = True
+        self.game_active = False
+
+        self.boton = BotonInicio(self, "play")
 
     def run_game(self):
         """Main game loop running at 60 FPS."""
@@ -137,7 +140,11 @@ class AstroPop:
     def _check_collide_bullet_enemy(self):
         """removes any balas & enemigos that have collided."""
         collision = pygame.sprite.groupcollide(
-            self.balas, self.enemigos, True, True, collided=self._hitbox_collision
+            self.balas,
+            self.enemigos,
+            True,
+            True,
+            collided=self._hitbox_collision,
         )
         if not self.enemigos:
             self.balas.empty()
@@ -195,9 +202,12 @@ class AstroPop:
     def _render_screen(self):
         """Draw all game elements on pantalla."""
         self.pantalla.fill("black")
-        self.naves.draw(self.pantalla)
-        self.balas.draw(self.pantalla)
-        self.enemigos.draw(self.pantalla)
+        if self.game_active:
+            self.naves.draw(self.pantalla)
+            self.balas.draw(self.pantalla)
+            self.enemigos.draw(self.pantalla)
+        else:
+            self.boton.draw_boton()
         pygame.display.flip()
 
 
