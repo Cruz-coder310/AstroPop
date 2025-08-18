@@ -107,6 +107,7 @@ class AstroPop:
             self.game_active = True
             self.options.vidas = 2
             self._reset_positions()
+            self.options.set_default_speeds()
             pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
@@ -169,6 +170,7 @@ class AstroPop:
         )
         if not self.enemigos:
             self._reset_positions(reset_enemigos=False)
+            self.options.increase_speeds()
 
     def _hitbox_collision(self, sprite_1, sprite_2):
         """
