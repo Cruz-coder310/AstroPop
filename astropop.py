@@ -51,6 +51,17 @@ class AstroPop:
             self._render_screen()
             self.reloj.tick(60)
 
+    def _reset_positions(self, reset_enemigos=True):
+        """
+        Helper to reposition the ship, clear balas & optionally reset enemigos
+        after life loss or game restart.
+        """
+        self.balas.empty()
+        if reset_enemigos:
+            self.enemigos.empty()
+        self._create_armada()
+        self.nave.set_position()
+
     def _process_events(self):
         """Handle keyboard and system events."""
         for event in pygame.event.get():
@@ -60,6 +71,9 @@ class AstroPop:
                 self._handle_keydown(event)
             elif event.type == pygame.KEYUP:
                 self._handle_keyup(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                self._check_play_boton(mouse_pos)
 
     def _handle_keydown(self, event):
         """Process key press events for movement and actions."""
@@ -87,6 +101,14 @@ class AstroPop:
         elif event.key == pygame.K_DOWN:
             self.nave.moving_down = False
 
+    def _check_play_boton(self, mouse_pos):
+        """Helper to activate the game when the Play boton is clicked."""
+        if self.boton.rect.collidepoint(mouse_pos) and not self.game_active:
+            self.game_active = True
+            self.options.vidas = 2
+            self._reset_positions()
+            pygame.mouse.set_visible(False)
+
     def _fire_bullet(self):
         """Create a new bullet and add it to the bullets group."""
         if len(self.balas) < self.options.balas:
@@ -107,11 +129,10 @@ class AstroPop:
         """
         if self.options.vidas > 0:
             self.options.vidas -= 1
-            self.balas.empty()
-            self.enemigos.empty()
-            self.nave.set_position()
-            sleep(1)
+            self._reset_positions()
+            sleep(0.5)
         else:
+            sleep(0.5)
             self.game_active = False
 
     def _check_enemy_left_edge_hit(self):
@@ -147,8 +168,7 @@ class AstroPop:
             collided=self._hitbox_collision,
         )
         if not self.enemigos:
-            self.balas.empty()
-            self._create_armada()
+            self._reset_positions(reset_enemigos=False)
 
     def _hitbox_collision(self, sprite_1, sprite_2):
         """
@@ -208,6 +228,7 @@ class AstroPop:
             self.enemigos.draw(self.pantalla)
         else:
             self.boton.draw_boton()
+            pygame.mouse.set_visible(True)
         pygame.display.flip()
 
 
