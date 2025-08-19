@@ -7,6 +7,8 @@ import resource_manager
 from balas import Bala
 from nave_enemiga import NaveEnemiga
 from boot_button import BotonInicio
+from game_stats import GameStats
+from game_scores import GameScores
 
 
 class AstroPop:
@@ -23,7 +25,8 @@ class AstroPop:
         pygame.display.set_caption("AstroPop")
 
         # Asset management
-        resource_manager.init_manager(self.options)
+        resource_manager.init_manager(self)
+        self.planeta = resource_manager.resources.planeta
 
         # Initialize sprite groups
         # Player nave.
@@ -39,6 +42,8 @@ class AstroPop:
         self.game_active = False
 
         self.boton = BotonInicio(self, "play")
+        self.stats = GameStats(self)
+        self.scores = GameScores(self)
 
     def run_game(self):
         """Main game loop running at 60 FPS."""
@@ -53,8 +58,8 @@ class AstroPop:
 
     def _reset_positions(self, reset_enemigos=True):
         """
-        Helper to reposition the ship, clear balas & optionally reset enemigos
-        after life loss or game restart.
+        Helper to reposition the ship, clear balas & optionally reset
+        enemigos after life loss or game restart.
         """
         self.balas.empty()
         if reset_enemigos:
@@ -105,7 +110,7 @@ class AstroPop:
         """Helper to activate the game when the Play boton is clicked."""
         if self.boton.rect.collidepoint(mouse_pos) and not self.game_active:
             self.game_active = True
-            self.options.vidas = 2
+            self.stats.initial_values()
             self._reset_positions()
             self.options.set_default_speeds()
             pygame.mouse.set_visible(False)
@@ -126,10 +131,11 @@ class AstroPop:
 
     def _handle_life_loss(self):
         """
-        Manages the nave's life loss in response to damage or enemy advancement.
+        Manages the nave's life loss in response to damage or enemy
+        advancement.
         """
-        if self.options.vidas > 0:
-            self.options.vidas -= 1
+        if self.stats.vidas > 0:
+            self.stats.vidas -= 1
             self._reset_positions()
             sleep(0.5)
         else:
@@ -148,14 +154,15 @@ class AstroPop:
 
     def _update_balas(self):
         """
-        Update the position of the balas on the screen & remove those that have
-        moved off-screen.
+        Update the position of the balas on the screen & remove those that
+        have moved off-screen.
         """
         self.balas.update()
         for bala in self.balas:
             if bala.rect.left >= self.rect_pnt.right:
                 bala.kill()
-        # This print lets me see if the bala was deleted after moving off-screen.
+        # This print lets me see if the bala was deleted after moving
+        # off-screen.
         # print(len(self.balas))
         self._check_collide_bullet_enemy()
 
@@ -168,6 +175,13 @@ class AstroPop:
             True,
             collided=self._hitbox_collision,
         )
+        if collision:
+            for enemy_list in collision.values():
+                self.stats.score += self.options.enemy_value * len(
+                    enemy_list
+                )
+            self.scores.format_score()
+
         if not self.enemigos:
             self._reset_positions(reset_enemigos=False)
             self.options.increase_speeds()
@@ -223,13 +237,15 @@ class AstroPop:
 
     def _render_screen(self):
         """Draw all game elements on pantalla."""
-        self.pantalla.fill("black")
+        self.pantalla.blit(self.planeta, (0, 0))
         if self.game_active:
             self.naves.draw(self.pantalla)
             self.balas.draw(self.pantalla)
             self.enemigos.draw(self.pantalla)
         else:
+            self.pantalla.fill("black")
             self.boton.draw_boton()
+            self.scores.draw_scores()
             pygame.mouse.set_visible(True)
         pygame.display.flip()
 

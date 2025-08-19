@@ -11,9 +11,10 @@ class ResourceManager:
             cls._instance = super(ResourceManager, cls).__new__(cls)
         return cls._instance
 
-    def __init__(self, options):
+    def __init__(self, game):
         """initialize the attributes of the ResourceManager class."""
-        self.options = options
+        self.options = game.options
+        self.rect_pnt = game.rect_pnt
         self._load_images()
 
     def _load_images(self):
@@ -34,6 +35,12 @@ class ResourceManager:
         )
 
         self.boton_inicio = self._prepare_image("./images/boton.png")
+
+        self.score = self._prepare_image("./images/YourScoreIs.png")
+
+        self.planeta = self._prepare_image(
+            "./images/planeta.png", self.rect_pnt.size
+        )
 
     def _prepare_image(self, path, size=None):
         """

@@ -23,19 +23,23 @@ class Options:
         self.armada_left_speed = 10.5
         self.armada_direction = 1
 
-        self.vidas = 0
+        self.vidas = 2
         self.speed_boost = 1.1
+        self.increase_value = 1.5
 
     def set_default_speeds(self):
         """Sets the initial speeds for the nave, enemigos & balas."""
         self.nave_speed = 2.5
-        self.bala_speed = 3.5
+        self.bala_speed = 10.5
         self.enemy_speed = 2.0
+        self.enemy_value = 50
 
     def increase_speeds(self):
         """
-        Increases the speed of nave, enemigos & balas to raise game difficulty.
+        Increases the speed of nave, enemigos & balas to raise game
+        difficulty.
         """
         self.nave_speed *= self.speed_boost
         self.bala_speed *= self.speed_boost
         self.enemy_speed *= self.speed_boost
+        self.enemy_value *= self.increase_value

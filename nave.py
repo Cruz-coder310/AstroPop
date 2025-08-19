@@ -37,7 +37,10 @@ class Nave(Sprite):
 
     def update(self):
         """Update ship positon based on movement flags."""
-        if self.moving_right and self.rect.right < self.rect_pnt.centerx // 2:
+        if (
+            self.moving_right
+            and self.rect.right < self.rect_pnt.centerx // 2
+        ):
             self.x += self.options.nave_speed
         if self.moving_left and self.rect.left > 0:
             self.x -= self.options.nave_speed
