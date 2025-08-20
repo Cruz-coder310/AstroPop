@@ -13,11 +13,13 @@ class GameScores:
         self.stats = game.stats
 
         self.fuente = pygame.font.SysFont(None, 60)
+
         self.score_image1 = rm.resources.score
-        self.score_rect = self.score_image1.get_rect()
-        self.score_rect.centerx = self.rect_pnt.centerx
+        self.rect_score1 = self.score_image1.get_rect()
+        self.rect_score1.centerx = self.rect_pnt.centerx
 
         self.format_score()
+        self.format_record()
 
     def format_score(self):
         """"""
@@ -28,7 +30,17 @@ class GameScores:
         self.rect_score.centerx = self.rect_pnt.centerx
         self.rect_score.y = self.rect_pnt.y + 50
 
+    def format_record(self):
+        """"""
+        round_record = round(self.stats.score, -1)
+        record_str = f"{round_record:,}"
+        self.record_image = self.fuente.render(record_str, True, "white")
+        self.rect_record = self.record_image.get_rect()
+        self.rect_record.center = self.rect_pnt.center
+
     def draw_scores(self):
         """"""
         self.pantalla.blit(self.score_image, self.rect_score)
-        self.pantalla.blit(self.score_image1, self.score_rect)
+        self.pantalla.blit(self.score_image1, self.rect_score1)
+
+        self.pantalla.blit(self.record_image, self.rect_record)

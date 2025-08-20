@@ -9,6 +9,7 @@ from nave_enemiga import NaveEnemiga
 from boot_button import BotonInicio
 from game_stats import GameStats
 from game_scores import GameScores
+from game_stages import GameStages
 
 
 class AstroPop:
@@ -26,7 +27,7 @@ class AstroPop:
 
         # Asset management
         resource_manager.init_manager(self)
-        self.planeta = resource_manager.resources.planeta
+        self.background = resource_manager.resources.background
 
         # Initialize sprite groups
         # Player nave.
@@ -39,9 +40,9 @@ class AstroPop:
         self.enemigos = pygame.sprite.Group()
         self._create_armada()
         # Flag to control whether the game is frozen.
-        self.game_active = False
+        self.game_active = GameStages.START
 
-        self.boton = BotonInicio(self, "play")
+        self.boton = BotonInicio(self, "Play")
         self.stats = GameStats(self)
         self.scores = GameScores(self)
 
@@ -49,7 +50,7 @@ class AstroPop:
         """Main game loop running at 60 FPS."""
         while True:
             self._process_events()
-            if self.game_active:
+            if self.game_active == GameStages.IN_GAME:
                 self._update_nave()
                 self._update_balas()
                 self._update_armada()
@@ -92,6 +93,11 @@ class AstroPop:
             self.nave.moving_down = True
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
+        elif event.key == pygame.K_p:
+            if self.game_active == GameStages.IN_GAME:
+                self.game_active = GameStages.PAUSE
+            elif self.game_active == GameStages.PAUSE:
+                self.game_active = GameStages.IN_GAME
         elif event.key == pygame.K_q:
             sys.exit()
 
@@ -108,11 +114,15 @@ class AstroPop:
 
     def _check_play_boton(self, mouse_pos):
         """Helper to activate the game when the Play boton is clicked."""
-        if self.boton.rect.collidepoint(mouse_pos) and not self.game_active:
-            self.game_active = True
+        if (
+            self.boton.rect.collidepoint(mouse_pos)
+            and self.game_active == GameStages.START
+        ):
+            self.game_active = GameStages.IN_GAME
             self.stats.initial_values()
             self._reset_positions()
             self.options.set_default_speeds()
+            self.scores.format_score()
             pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
@@ -140,7 +150,7 @@ class AstroPop:
             sleep(0.5)
         else:
             sleep(0.5)
-            self.game_active = False
+            self.game_active = GameStages.START
 
     def _check_enemy_left_edge_hit(self):
         """
@@ -180,6 +190,9 @@ class AstroPop:
                 self.stats.score += self.options.enemy_value * len(
                     enemy_list
                 )
+                if self.stats.score > self.stats.record:
+                    self.stats.record = self.stats.score
+                    self.scores.format_record()
             self.scores.format_score()
 
         if not self.enemigos:
@@ -237,16 +250,18 @@ class AstroPop:
 
     def _render_screen(self):
         """Draw all game elements on pantalla."""
-        self.pantalla.blit(self.planeta, (0, 0))
-        if self.game_active:
+        if self.game_active == GameStages.IN_GAME:
+            self.pantalla.blit(self.background, (0, 0))
             self.naves.draw(self.pantalla)
             self.balas.draw(self.pantalla)
             self.enemigos.draw(self.pantalla)
-        else:
-            self.pantalla.fill("black")
+        elif self.game_active == GameStages.START:
+            self.pantalla.blit(self.background, (0, 0))
             self.boton.draw_boton()
-            self.scores.draw_scores()
             pygame.mouse.set_visible(True)
+        elif self.game_active == GameStages.PAUSE:
+            self.pantalla.fill("black")
+            self.scores.draw_scores()
         pygame.display.flip()
 
 

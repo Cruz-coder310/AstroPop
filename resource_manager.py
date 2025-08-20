@@ -38,7 +38,7 @@ class ResourceManager:
 
         self.score = self._prepare_image("./images/YourScoreIs.png")
 
-        self.planeta = self._prepare_image(
+        self.background = self._prepare_image(
             "./images/planeta.png", self.rect_pnt.size
         )
 
