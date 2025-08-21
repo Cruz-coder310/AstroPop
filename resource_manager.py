@@ -36,10 +36,20 @@ class ResourceManager:
 
         self.boton_inicio = self._prepare_image("./images/boton.png")
 
-        self.score = self._prepare_image("./images/YourScoreIs.png")
+        self.score = self._prepare_image(
+            "./images/YourScoreIs.png", (700, 100)
+        )
+
+        self.record = self._prepare_image(
+            "./images/HighScores.png", (600, 90)
+        )
 
         self.background = self._prepare_image(
             "./images/planeta.png", self.rect_pnt.size
+        )
+
+        self.lives_button = self._prepare_image(
+            "./images/button2.png", (250, 100)
         )
 
     def _prepare_image(self, path, size=None):

@@ -28,7 +28,10 @@ class Options:
         self.increase_value = 1.5
 
     def set_default_speeds(self):
-        """Sets the initial speeds for the nave, enemigos & balas."""
+        """
+        Sets the initial speeds for the nave, enemigos & balas, as well as
+        the base value for each anemy.
+        """
         self.nave_speed = 2.5
         self.bala_speed = 10.5
         self.enemy_speed = 2.0
@@ -36,8 +39,8 @@ class Options:
 
     def increase_speeds(self):
         """
-        Increases the speed of nave, enemigos & balas to raise game
-        difficulty.
+        Increases the speed of nave, enemigos & balas as well as the enemy
+        value, to raise overall game difficulty & reward.
         """
         self.nave_speed *= self.speed_boost
         self.bala_speed *= self.speed_boost
