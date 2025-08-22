@@ -43,6 +43,12 @@ class GameScores:
         self.format_lives()
         self.prepare_naves()
 
+        self.level_panel = rm.resources.panel_pause_cyan
+        self.rect_level_panel = self.level_panel.get_rect()
+        self.rect_level_panel.centerx = self.rect_pnt.width * 0.3
+        self.rect_level_panel.centery = self.rect_pnt.height * 0.75
+        self.format_level()
+
     def format_score(self):
         """Format the current score & render it as an image for display."""
         round_score = int(round(self.stats.score, -1))
@@ -88,6 +94,13 @@ class GameScores:
             nave.rect.top = initial_position + vertical_offset
             self.naves.add(nave)
 
+    def format_level(self):
+        """Displays the player's current level centered on the level panel."""
+        level_str = f"Level:   {self.stats.level}"
+        self.level_font = self.font.render(level_str, True, "white")
+        self.rect_level_font = self.level_font.get_rect()
+        self.rect_level_font.center = self.rect_level_panel.center
+
     def draw_scores(self):
         """
         Render & display score visuals & other related components on the
@@ -104,3 +117,6 @@ class GameScores:
         self.pantalla.blit(self.lives_panel, self.rect_lives_panel)
         self.pantalla.blit(self.lives_font, self.rect_lives_font)
         self.naves.draw(self.pantalla)
+
+        self.pantalla.blit(self.level_panel, self.rect_level_panel)
+        self.pantalla.blit(self.level_font, self.rect_level_font)

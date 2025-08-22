@@ -63,6 +63,11 @@ class ResourceManager:
             (self.rect_pnt.width * 0.4, self.rect_pnt.height * 0.9),
         )
 
+        self.panel_pause_cyan = self._prepare_image(
+            "./images/panel-cyan.png",
+            (self.rect_pnt.width * 0.5, self.rect_pnt.height * 0.4),
+        )
+
     def _prepare_image(self, path, size=None):
         """
         Loads an image from the given path & returns an optimized version.

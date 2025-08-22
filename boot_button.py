@@ -20,12 +20,12 @@ class BotonInicio:
         self._boton_msg(msg)
 
     def _boton_msg(self, msg):
-        """_"""
+        """Renders a message & centers it on the button panel."""
         self.msg_image = self.fuente.render(msg, True, self.text_color)
         self.msg_rect = self.msg_image.get_rect()
         self.msg_rect.center = self.rect.center
 
     def draw_boton(self):
-        """-"""
+        """Draws the button & its message onto the screen."""
         self.pantalla.blit(self.image, self.rect)
         self.pantalla.blit(self.msg_image, self.msg_rect)

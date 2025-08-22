@@ -125,6 +125,7 @@ class AstroPop:
             self.options.set_default_speeds()
             self.scores.format_score()
             self.scores.prepare_naves()
+            self.scores.format_level()
             pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
@@ -203,6 +204,8 @@ class AstroPop:
         if not self.enemigos:
             self._reset_positions(reset_enemigos=False)
             self.options.increase_speeds()
+            self.stats.level += 1
+            self.scores.format_level()
 
     def _create_armada(self):
         """Build an enemy armada based on the screen dimensions."""
