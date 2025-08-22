@@ -16,7 +16,8 @@ class Bala(Sprite):
         self.nave = game.nave
 
         # Load the 'Bala' asset from the resources module.
-        self.image = rm.resources.bala_img
+        self.image = rm.resources.bala_image
+        self.mask = rm.resources.bala_mask
 
         # Position bullet at ship's right side.
         self.rect = self.image.get_rect()

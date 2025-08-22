@@ -16,16 +16,13 @@ class NaveEnemiga(Sprite):
         self.rect_screen = game.pantalla
 
         # Load the 'NaveEnemiga' asset from the resources module.
-        self.image = rm.resources.enemigo_img
+        self.image = rm.resources.enemigo_image
+        self.mask = rm.resources.enemigo_mask
 
         # position of the enemyship
         self.rect = self.image.get_rect()
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
-
-        # Hitbox defines the size of the rect used for bullet collisions.
-        self.hitbox = self.rect.copy()
-        self.hitbox.inflate_ip(-79, -79)
 
     def vertical_edges(self):
         """Detect vertical edge contact and return a boolean result."""
@@ -37,5 +34,3 @@ class NaveEnemiga(Sprite):
         self.y += self.options.enemy_speed * self.options.armada_direction
         self.rect.x = self.x
         self.rect.y = self.y
-
-        self.hitbox.center = self.rect.center

@@ -16,7 +16,8 @@ class Nave(Sprite):
         self.options = game.options
 
         # Load the 'Nave' asset from the resources module.
-        self.image = rm.resources.nave_img
+        self.image = rm.resources.nave_image
+        self.mask = rm.resources.nave_mask
 
         # Position ship at left-center of screen.
         self.rect = self.image.get_rect()

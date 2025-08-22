@@ -18,12 +18,13 @@ class AstroPop:
     def __init__(self):
         """Initialize game attributes and Pygame settings."""
         pygame.init()
-        self.options = Options()
         self.reloj = pygame.time.Clock()
 
         self.pantalla = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         self.rect_pnt = self.pantalla.get_rect()
         pygame.display.set_caption("AstroPop")
+
+        self.options = Options(self)
 
         # Asset management
         resource_manager.init_manager(self)
@@ -123,6 +124,7 @@ class AstroPop:
             self._reset_positions()
             self.options.set_default_speeds()
             self.scores.format_score()
+            self.scores.prepare_naves()
             pygame.mouse.set_visible(False)
 
     def _fire_bullet(self):
@@ -135,7 +137,9 @@ class AstroPop:
         """Update the nave's position & check for collisions."""
         self.naves.update()
         # Check if the nave takes damage from enemy collisions.
-        if pygame.sprite.spritecollideany(self.nave, self.enemigos):
+        if pygame.sprite.spritecollideany(
+            self.nave, self.enemigos, collided=pygame.sprite.collide_mask
+        ):
             self._handle_life_loss()
         self._check_enemy_left_edge_hit()
 
@@ -147,6 +151,7 @@ class AstroPop:
         if self.stats.vidas > 0:
             self.stats.vidas -= 1
             self._reset_positions()
+            self.scores.prepare_naves()
             sleep(0.5)
         else:
             sleep(0.5)
@@ -183,7 +188,7 @@ class AstroPop:
             self.enemigos,
             True,
             True,
-            collided=self._hitbox_collision,
+            collided=pygame.sprite.collide_mask,
         )
         if collision:
             for enemy_list in collision.values():
@@ -198,12 +203,6 @@ class AstroPop:
         if not self.enemigos:
             self._reset_positions(reset_enemigos=False)
             self.options.increase_speeds()
-
-    def _hitbox_collision(self, sprite_1, sprite_2):
-        """
-        Detects if the bala's rectangle intersects with the enemy's hitbox.
-        """
-        return sprite_1.rect.colliderect(sprite_2.hitbox)
 
     def _create_armada(self):
         """Build an enemy armada based on the screen dimensions."""

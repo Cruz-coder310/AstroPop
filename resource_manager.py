@@ -19,37 +19,48 @@ class ResourceManager:
 
     def _load_images(self):
         """Loads all image files from the current working directory."""
-        self.nave_img = self._prepare_image(
+        self.nave_image = self._prepare_image(
             "./images/UFO.png",
             (self.options.ancho_nave, self.options.alto_nave),
         )
+        self.nave_mask = pygame.mask.from_surface(self.nave_image)
 
-        self.enemigo_img = self._prepare_image(
+        self.enemigo_image = self._prepare_image(
             "./images/enemyship.png",
             (self.options.enemy_width, self.options.enemy_height),
         )
+        self.enemigo_mask = pygame.mask.from_surface(self.enemigo_image)
 
-        self.bala_img = self._prepare_image(
+        self.bala_image = self._prepare_image(
             "./images/48.png",
             (self.options.bala_width, self.options.bala_height),
         )
+        self.bala_mask = pygame.mask.from_surface(self.bala_image)
 
         self.boton_inicio = self._prepare_image("./images/boton.png")
 
         self.score = self._prepare_image(
-            "./images/YourScoreIs.png", (700, 100)
+            "./images/YourScoreIs.png",
+            (self.rect_pnt.width * 0.6, self.rect_pnt.height * 0.1),
         )
 
         self.record = self._prepare_image(
-            "./images/HighScores.png", (600, 90)
+            "./images/HighScores.png",
+            (self.rect_pnt.width * 0.5, self.rect_pnt.height * 0.1),
         )
 
         self.background = self._prepare_image(
             "./images/planeta.png", self.rect_pnt.size
         )
 
-        self.lives_button = self._prepare_image(
-            "./images/button2.png", (250, 100)
+        self.panel_pause_blue = self._prepare_image(
+            "./images/panel-1.png",
+            (self.rect_pnt.width * 0.6, self.rect_pnt.height * 0.5),
+        )
+
+        self.panel_pause_red = self._prepare_image(
+            "./images/panel-2.png",
+            (self.rect_pnt.width * 0.4, self.rect_pnt.height * 0.9),
         )
 
     def _prepare_image(self, path, size=None):

@@ -1,23 +1,23 @@
 class Options:
     """Game configuration settings."""
 
-    def __init__(self):
+    def __init__(self, game):
         """Initialize game settings & speeds."""
+        self.rect_pnt = game.rect_pnt
         # Nave
-        self.ancho_nave = 100
-        self.alto_nave = 100
-
+        self.ancho_nave = self.rect_pnt.width * 0.08
+        self.alto_nave = self.rect_pnt.height * 0.15
         # Bullet
-        self.bala_width = 80
-        self.bala_height = 55
+        self.bala_width = self.ancho_nave * 0.75
+        self.bala_height = self.alto_nave * 0.50
 
         # Number of balas visible on the screen.
         self.balas = 10
 
         # Enemyship.
-        self.margen_enemigo = 30
-        self.enemy_width = 80
-        self.enemy_height = 80
+        self.enemy_width = self.rect_pnt.width * 0.06
+        self.enemy_height = self.rect_pnt.height * 0.11
+        self.margen_enemigo = self.enemy_height * 0.5
 
         # Armada
         self.armada_left_speed = 10.5

@@ -28,6 +28,4 @@ class BotonInicio:
     def draw_boton(self):
         """-"""
         self.pantalla.blit(self.image, self.rect)
-        self.pantalla.blit(
-            self.msg_image, (self.msg_rect.x, self.msg_rect.y - 5)
-        )
+        self.pantalla.blit(self.msg_image, self.msg_rect)
